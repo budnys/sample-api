@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         testdox="true"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         failOnRisky="true"
+         failOnWarning="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+        <exclude>
+            <file>app/bootstrap.php</file>
+            <file>app/middleware.php</file>
+            <file>app/routes.php</file>
+        </exclude>
+    </source>
+
+    <coverage>
+        <report>
+            <html outputDirectory="coverage-report"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="APP_URL" value="http://localhost:8080"/>
+        <env name="JWT_SECRET" value="a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"/>
+        <env name="JWT_EXPIRY" value="3600"/>
+        <env name="JWT_REFRESH_EXPIRY" value="604800"/>
+        <env name="JWT_ALGORITHM" value="HS256"/>
+        <env name="SMTP_HOST" value="mail.test.com"/>
+        <env name="SMTP_PORT" value="465"/>
+        <env name="SMTP_ENCRYPTION" value="ssl"/>
+        <env name="SMTP_USER" value="test@test.com"/>
+        <env name="SMTP_PASS" value="testpass"/>
+        <env name="SMTP_FROM_EMAIL" value="noreply@test.com"/>
+        <env name="SMTP_FROM_NAME" value="Test API"/>
+        <env name="CONTACT_TO_EMAIL" value="contact@test.com"/>
+        <env name="HCAPTCHA_SECRET" value=""/>
+    </php>
+</phpunit>

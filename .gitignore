@@ -7,3 +7,6 @@ composer.lock
 .DS_Store
 .idea/
 .vscode/
+.phpunit.cache/
+coverage-report/
+coverage.xml

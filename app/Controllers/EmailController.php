@@ -114,7 +114,7 @@ class EmailController
         }
     }
 
-    private function sendEmail(string $senderName, string $recipientEmail, string $htmlMessage): void
+    protected function sendEmail(string $senderName, string $recipientEmail, string $htmlMessage): void
     {
         $mail = new PHPMailer(true);
 
@@ -183,22 +183,21 @@ HTML;
 
         if (empty($body['name']) || !is_string($body['name']) || strlen(trim($body['name'])) < 2) {
             $errors['name'] = 'Name is required and must be at least 2 characters.';
-        }
-        if (strlen($body['name'] ?? '') > 255) {
+        } elseif (strlen((string) ($body['name'] ?? '')) > 255) {
             $errors['name'] = 'Name must not exceed 255 characters.';
         }
 
-        if (empty($body['email']) || !filter_var($body['email'] ?? '', FILTER_VALIDATE_EMAIL)) {
+        if (empty($body['email']) || !is_string($body['email'])) {
             $errors['email'] = 'A valid recipient email address is required.';
-        }
-        if (strlen($body['email'] ?? '') > 255) {
+        } elseif (strlen($body['email']) > 255) {
             $errors['email'] = 'Email must not exceed 255 characters.';
+        } elseif (!filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'A valid recipient email address is required.';
         }
 
         if (empty($body['message']) || !is_string($body['message']) || strlen(trim($body['message'])) < 1) {
             $errors['message'] = 'Message content is required.';
-        }
-        if (strlen($body['message'] ?? '') > 50000) {
+        } elseif (strlen((string) ($body['message'] ?? '')) > 50000) {
             $errors['message'] = 'Message must not exceed 50,000 characters.';
         }
 

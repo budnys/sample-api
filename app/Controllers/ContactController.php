@@ -128,7 +128,7 @@ class ContactController
     /**
      * OWASP A07: Verify hCaptcha token server-side
      */
-    private function verifyCaptcha(string $token, Request $request): bool
+    protected function verifyCaptcha(string $token, Request $request): bool
     {
         if (empty($this->captchaSettings['secret'])) {
             $this->logger->warning('HCAPTCHA_SECRET not configured, skipping verification');
@@ -145,10 +145,27 @@ class ContactController
             'remoteip' => $this->getClientIp($request),
         ];
 
-        $ch = curl_init($this->captchaSettings['verify_url']);
+        $response = $this->httpPost($this->captchaSettings['verify_url'], $postData);
+
+        if ($response === false) {
+            $this->logger->error('hCaptcha verification request failed');
+            return false;
+        }
+
+        $result = json_decode($response, true);
+        return isset($result['success']) && $result['success'] === true;
+    }
+
+    /**
+     * Make an HTTP POST request (extracted for testability)
+     * @return string|false Response body or false on failure
+     */
+    protected function httpPost(string $url, array $data): string|false
+    {
+        $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($postData),
+            CURLOPT_POSTFIELDS => http_build_query($data),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => true,
@@ -157,22 +174,16 @@ class ContactController
 
         $responseBody = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
         curl_close($ch);
 
         if ($responseBody === false || $httpCode !== 200) {
-            $this->logger->error('hCaptcha verification request failed', [
-                'http_code' => $httpCode,
-                'curl_error' => $curlError,
-            ]);
             return false;
         }
 
-        $result = json_decode($responseBody, true);
-        return isset($result['success']) && $result['success'] === true;
+        return $responseBody;
     }
 
-    private function sendEmail(string $senderName, string $senderEmail, string $htmlMessage): void
+    protected function sendEmail(string $senderName, string $senderEmail, string $htmlMessage): void
     {
         $mail = new PHPMailer(true);
 
@@ -256,10 +267,12 @@ HTML;
         }
 
         // Email validation (OWASP: use server-side validation, not just regex)
-        if (empty($body['email']) || !filter_var($body['email'] ?? '', FILTER_VALIDATE_EMAIL)) {
+        if (empty($body['email']) || !is_string($body['email'])) {
             $errors['email'] = 'A valid email address is required.';
         } elseif (strlen($body['email']) > 255) {
             $errors['email'] = 'Email must not exceed 255 characters.';
+        } elseif (!filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'A valid email address is required.';
         }
 
         // Message validation
