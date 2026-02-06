@@ -1,0 +1,35 @@
+# OWASP: Apache configuration for secure API
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Route all requests through index.php (front controller)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# OWASP: Disable directory listing
+Options -Indexes
+
+# OWASP: Disable server signature
+ServerSignature Off
+
+# OWASP A05: Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Content-Security-Policy "default-src 'none'; frame-ancestors 'none'"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always unset X-Powered-By
+    Header always unset Server
+</IfModule>
+
+# Deny access to hidden files
+<FilesMatch "^\.">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

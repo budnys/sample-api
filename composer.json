@@ -1,0 +1,31 @@
+{
+    "name": "secure-api/slim-owasp",
+    "description": "Secure REST API using Slim 4 with OWASP guidelines for Dreamhost shared hosting",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "firebase/php-jwt": "^6.10",
+        "monolog/monolog": "^3.5",
+        "php-di/php-di": "^7.0",
+        "phpmailer/phpmailer": "^7.0",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.12",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "scripts": {
+        "start": "php -S localhost:8080 -t public",
+        "test": "phpunit --testdox"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

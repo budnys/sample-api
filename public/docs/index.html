@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NomadTri API Documentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11/swagger-ui.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fafafa; }
+
+        .top-bar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            padding: 30px 40px;
+        }
+        .top-bar h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .top-bar p { font-size: 15px; color: #a8b2d1; line-height: 1.6; max-width: 700px; }
+        .top-bar .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-top: 12px;
+        }
+        .top-bar .badge.green { background: rgba(72,187,120,0.2); border-color: rgba(72,187,120,0.4); color: #68d391; }
+        .top-bar .badge.blue { background: rgba(66,153,225,0.2); border-color: rgba(66,153,225,0.4); color: #90cdf4; }
+        .top-bar .badge.orange { background: rgba(237,137,54,0.2); border-color: rgba(237,137,54,0.4); color: #fbd38d; }
+
+        .guide {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+        .guide h2 {
+            font-size: 20px;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 24px;
+            transition: box-shadow 0.2s;
+        }
+        .step:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #0f3460;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .step h3 { font-size: 16px; color: #2d3748; margin-bottom: 8px; }
+        .step p { font-size: 14px; color: #718096; line-height: 1.6; }
+        .step code {
+            display: block;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #2d3748;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .security-note {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-left: 4px solid #fc8181;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin-bottom: 30px;
+        }
+        .security-note h3 { font-size: 15px; color: #c53030; margin-bottom: 6px; }
+        .security-note p { font-size: 13px; color: #742a2a; line-height: 1.6; }
+
+        #swagger-ui { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
+        .swagger-ui .topbar { display: none; }
+        .swagger-ui .info { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <h1>NomadTri API Documentation</h1>
+    <p>
+        Secure REST API built with Slim 4 &amp; OWASP Top 10 security guidelines.
+        Use the interactive explorer below to test endpoints directly.
+    </p>
+    <span class="badge green">Slim 4</span>
+    <span class="badge blue">JWT Auth</span>
+    <span class="badge orange">OWASP Secured</span>
+</div>
+
+<div class="guide">
+    <h2>Quick Start Guide</h2>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h3>Register an Account</h3>
+            <p>Create a new user by sending a POST request with your name, email, and a strong password.</p>
+            <code>POST /api/v1/auth/register
+{
+  "name": "Your Name",
+  "email": "you@example.com",
+  "password": "SecurePass1"
+}</code>
+        </div>
+
+        <div class="step">
+            <div class="step-num">2</div>
+            <h3>Copy Your Token</h3>
+            <p>The response includes an <strong>access_token</strong> and a <strong>refresh_token</strong>. Copy the access token.</p>
+            <code>Response:
+{
+  "access_token": "eyJhbG...",
+  "refresh_token": "eyJhbG...",
+  "token_type": "Bearer"
+}</code>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <h3>Authorize in Swagger</h3>
+            <p>Click the <strong>Authorize</strong> button below, paste your token, and click <strong>Authorize</strong>. All protected endpoints will now work.</p>
+            <code>Authorization: Bearer eyJhbG...</code>
+        </div>
+
+        <div class="step">
+            <div class="step-num">4</div>
+            <h3>Send an Email</h3>
+            <p>Use the <strong>POST /api/v1/email/send</strong> endpoint to send emails with HTML content via Dreamhost SMTP.</p>
+            <code>POST /api/v1/email/send
+{
+  "name": "Jane Doe",
+  "email": "recipient@example.com",
+  "message": "&lt;p&gt;Hello!&lt;/p&gt;"
+}</code>
+        </div>
+    </div>
+
+    <div class="security-note">
+        <h3>Security Notice</h3>
+        <p>
+            This API enforces OWASP Top 10 security guidelines including rate limiting (60 req/min),
+            JWT token expiry (1 hour), bcrypt password hashing, input sanitization, and secure HTTP headers.
+            Never share your tokens. Use HTTPS in production.
+        </p>
+    </div>
+</div>
+
+<div id="swagger-ui"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11/swagger-ui-bundle.js"></script>
+<script>
+    SwaggerUIBundle({
+        url: '/docs/openapi.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: 'BaseLayout',
+        defaultModelsExpandDepth: 1,
+        docExpansion: 'list',
+        filter: true,
+        tryItOutEnabled: true,
+    });
+</script>
+
+</body>
+</html>

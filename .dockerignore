@@ -1,0 +1,7 @@
+.git
+.env
+logs/
+storage/
+.DS_Store
+.idea/
+.vscode/

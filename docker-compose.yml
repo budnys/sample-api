@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: nomadtri-api
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor  # Don't override container's vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: nomadtri-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_secret
+      MYSQL_DATABASE: nomadtri_api
+      MYSQL_USER: nomadtri
+      MYSQL_PASSWORD: nomadtri_secret
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/migration.sql:/docker-entrypoint-initdb.d/01-migration.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_secret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  db_data:
