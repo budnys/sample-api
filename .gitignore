@@ -10,3 +10,4 @@ composer.lock
 .phpunit.cache/
 coverage-report/
 coverage.xml
+DEPLOYMENT.md
