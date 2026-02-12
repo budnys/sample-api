@@ -49,7 +49,7 @@ class HealthControllerTest extends TestCase
         $result->getBody()->rewind();
         $html = $result->getBody()->getContents();
         $this->assertStringContainsString('<!DOCTYPE html>', $html);
-        $this->assertStringContainsString('NomadTri', $html);
+        $this->assertStringContainsString('GoNyva', $html);
         $this->assertStringContainsString('swagger-ui', $html);
     }
 }

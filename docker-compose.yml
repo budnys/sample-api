@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: nomadtri-api
+    container_name: gonyva-api
     ports:
       - "8080:80"
     volumes:
@@ -21,14 +21,14 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: nomadtri-db
+    container_name: gonyva-db
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_secret
-      MYSQL_DATABASE: nomadtri_api
-      MYSQL_USER: nomadtri
-      MYSQL_PASSWORD: nomadtri_secret
+      MYSQL_DATABASE: gonyva_api
+      MYSQL_USER: gonyva
+      MYSQL_PASSWORD: gonyva_secret
     volumes:
       - db_data:/var/lib/mysql
       - ./database/migration.sql:/docker-entrypoint-initdb.d/01-migration.sql
