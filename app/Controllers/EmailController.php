@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * Email sending controller using Dreamhost SMTP (nomadtri.com)
+ * Email sending controller using Dreamhost SMTP (gonyva.co)
  * OWASP A03: Input validation and sanitization for email content
  * OWASP A07: JWT-protected endpoint
  */
@@ -25,13 +25,13 @@ class EmailController
     {
         $this->logger = $logger;
         $this->smtpSettings = [
-            'host' => $_ENV['SMTP_HOST'] ?? 'mail.nomadtri.com',
+            'host' => $_ENV['SMTP_HOST'] ?? 'mail.gonyva.co',
             'port' => (int) ($_ENV['SMTP_PORT'] ?? 465),
             'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'ssl',
             'user' => $_ENV['SMTP_USER'] ?? '',
             'pass' => $_ENV['SMTP_PASS'] ?? '',
-            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@nomadtri.com',
-            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'NomadTri API',
+            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'GoNyva API',
         ];
     }
 
@@ -142,7 +142,7 @@ class EmailController
         // Email content
         $mail->isHTML(true);
         $mail->CharSet = 'UTF-8';
-        $mail->Subject = "Message from {$senderName} via NomadTri";
+        $mail->Subject = "Message from {$senderName} via GoNyva";
         $mail->Body = $this->wrapHtml($senderName, $htmlMessage);
         $mail->AltBody = strip_tags(str_replace(['<br>', '<br/>', '<br />'], "\n", $htmlMessage));
 
@@ -170,7 +170,7 @@ class EmailController
             {$htmlContent}
         </div>
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-        <p style="color: #999; font-size: 12px; margin-bottom: 0;">Sent via NomadTri API</p>
+        <p style="color: #999; font-size: 12px; margin-bottom: 0;">Sent via GoNyva API</p>
     </div>
 </body>
 </html>

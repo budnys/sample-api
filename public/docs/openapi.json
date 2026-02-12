@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "NomadTri Secure API",
+    "title": "GoNyva Secure API",
     "description": "REST API built with Slim 4 following OWASP Top 10 security guidelines. Hosted on Dreamhost shared hosting.\n\n## Authentication\n\nAll protected endpoints require a **Bearer token** in the `Authorization` header.\n\n```\nAuthorization: Bearer <your_access_token>\n```\n\n### How to get a token\n1. Register via `POST /api/v1/auth/register`\n2. Or login via `POST /api/v1/auth/login`\n3. Use the returned `access_token` in subsequent requests\n4. When the token expires, use `POST /api/v1/auth/refresh` with your `refresh_token`\n\n## Rate Limiting\n\nAll endpoints are rate-limited to **60 requests per minute** per IP. Check response headers:\n- `X-RateLimit-Limit` — Max requests per window\n- `X-RateLimit-Remaining` — Remaining requests\n- `X-RateLimit-Reset` — Unix timestamp when the window resets\n\n## Security Headers\n\nAll responses include OWASP-recommended security headers (CSP, HSTS, X-Frame-Options, etc.).",
     "version": "1.0.0",
     "contact": {
-      "name": "NomadTri",
-      "url": "https://nomadtri.com"
+      "name": "GoNyva",
+      "url": "https://gonyva.co"
     }
   },
   "servers": [
@@ -15,7 +15,7 @@
       "description": "Local development"
     },
     {
-      "url": "https://api.nomadtri.com",
+      "url": "https://api.gonyva.co",
       "description": "Production"
     }
   ],
@@ -354,7 +354,7 @@
       "post": {
         "tags": ["Email"],
         "summary": "Send an email",
-        "description": "Sends an email via Dreamhost SMTP (nomadtri.com). Requires JWT authentication. The `message` field accepts HTML content which will be sanitized before sending.\n\n**Allowed HTML tags:** `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`",
+        "description": "Sends an email via Dreamhost SMTP (gonyva.co). Requires JWT authentication. The `message` field accepts HTML content which will be sanitized before sending.\n\n**Allowed HTML tags:** `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,

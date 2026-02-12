@@ -44,13 +44,13 @@ $container->set('settings', function () {
             'max_age' => (int) ($_ENV['CORS_MAX_AGE'] ?? 86400),
         ],
         'smtp' => [
-            'host' => $_ENV['SMTP_HOST'] ?? 'mail.nomadtri.com',
+            'host' => $_ENV['SMTP_HOST'] ?? 'mail.gonyva.co',
             'port' => (int) ($_ENV['SMTP_PORT'] ?? 465),
             'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'ssl',
             'user' => $_ENV['SMTP_USER'] ?? '',
             'pass' => $_ENV['SMTP_PASS'] ?? '',
-            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@nomadtri.com',
-            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'NomadTri API',
+            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'GoNyva API',
         ],
     ];
 });

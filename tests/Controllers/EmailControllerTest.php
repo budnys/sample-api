@@ -254,7 +254,7 @@ class EmailControllerTest extends TestCase
         $this->assertStringContainsString('John Doe', $result);
         $this->assertStringContainsString('<p>Test message</p>', $result);
         $this->assertStringContainsString('<!DOCTYPE html>', $result);
-        $this->assertStringContainsString('NomadTri API', $result);
+        $this->assertStringContainsString('GoNyva API', $result);
     }
 
     // --- SMTP error handling ---

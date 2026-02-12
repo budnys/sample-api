@@ -26,14 +26,14 @@ class ContactController
     {
         $this->logger = $logger;
         $this->smtpSettings = [
-            'host' => $_ENV['SMTP_HOST'] ?? 'mail.nomadtri.com',
+            'host' => $_ENV['SMTP_HOST'] ?? 'mail.gonyva.co',
             'port' => (int) ($_ENV['SMTP_PORT'] ?? 465),
             'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'ssl',
             'user' => $_ENV['SMTP_USER'] ?? '',
             'pass' => $_ENV['SMTP_PASS'] ?? '',
-            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@nomadtri.com',
-            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'NomadTri API',
-            'to_email' => $_ENV['CONTACT_TO_EMAIL'] ?? $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@nomadtri.com',
+            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'GoNyva API',
+            'to_email' => $_ENV['CONTACT_TO_EMAIL'] ?? $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
         ];
         $this->captchaSettings = [
             'secret' => $_ENV['HCAPTCHA_SECRET'] ?? '',
@@ -243,7 +243,7 @@ class ContactController
             {$htmlContent}
         </div>
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-        <p style="color: #999; font-size: 12px; margin-bottom: 0;">Sent via NomadTri Contact Form</p>
+        <p style="color: #999; font-size: 12px; margin-bottom: 0;">Sent via GoNyva Contact Form</p>
     </div>
 </body>
 </html>
