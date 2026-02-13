@@ -232,7 +232,7 @@ curl -X POST http://localhost:8080/api/v1/email/send \
 The `POST /api/v1/email/send` endpoint:
 
 - **Requires**: JWT authentication
-- **SMTP**: Sends via Dreamhost's `mail.gonyva.co` (port 465, SSL)
+- **SMTP**: Sends via Dreamhost's `smtp.dreamhost.com` (port 587, STARTTLS)
 - **HTML support**: The `message` field accepts HTML content which is sanitized before sending
 - **Allowed HTML tags**: `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>` and related tags
 - **Stripped**: JavaScript event handlers (`onclick`, `onerror`, etc.) and `javascript:` URIs
@@ -285,9 +285,9 @@ JWT_SECRET=<64+ character random string>
 
 CORS_ALLOWED_ORIGINS=https://gonyva.co
 
-SMTP_HOST=mail.gonyva.co
-SMTP_PORT=465
-SMTP_ENCRYPTION=ssl
+SMTP_HOST=smtp.dreamhost.com
+SMTP_PORT=587
+SMTP_ENCRYPTION=tls
 SMTP_USER=noreply@gonyva.co
 SMTP_PASS=your_email_password
 SMTP_FROM_EMAIL=noreply@gonyva.co
