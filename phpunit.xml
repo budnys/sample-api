@@ -35,17 +35,18 @@
 
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="APP_DEBUG" value="true"/>
+        <env name="APP_DEBUG" value="false"/>
         <env name="APP_URL" value="http://localhost:8080"/>
         <env name="JWT_SECRET" value="a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"/>
         <env name="JWT_EXPIRY" value="3600"/>
         <env name="JWT_REFRESH_EXPIRY" value="604800"/>
         <env name="JWT_ALGORITHM" value="HS256"/>
-        <env name="SMTP_HOST" value="mail.test.com"/>
-        <env name="SMTP_PORT" value="465"/>
-        <env name="SMTP_ENCRYPTION" value="ssl"/>
+        <env name="SMTP_HOST" value="smtp.dreamhost.com"/>
+        <env name="SMTP_PORT" value="587"/>
+        <env name="SMTP_ENCRYPTION" value="tls"/>
         <env name="SMTP_USER" value="test@test.com"/>
         <env name="SMTP_PASS" value="testpass"/>
+        <env name="SMTP_TIMEOUT" value="1"/>
         <env name="SMTP_FROM_EMAIL" value="noreply@test.com"/>
         <env name="SMTP_FROM_NAME" value="Test API"/>
         <env name="CONTACT_TO_EMAIL" value="contact@test.com"/>

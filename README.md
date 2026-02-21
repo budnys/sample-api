@@ -1,4 +1,4 @@
-# GoNyva Secure REST API
+# Sample Secure REST API
 
 A lightweight, secure REST API built with **Slim Framework 4** following **OWASP Top 10** security guidelines. Includes JWT authentication, email sending via Dreamhost SMTP, and interactive Swagger documentation. Designed to run on **Dreamhost shared hosting** with a **Docker Compose** environment for local development.
 
@@ -6,7 +6,7 @@ A lightweight, secure REST API built with **Slim Framework 4** following **OWASP
 
 - **Framework**: [Slim 4](https://www.slimframework.com/) — lightweight PHP micro-framework
 - **Auth**: JWT via [firebase/php-jwt](https://github.com/firebase/php-jwt)
-- **Email**: SMTP via [PHPMailer](https://github.com/PHPMailer/PHPMailer) (Dreamhost `gonyva.co`)
+- **Email**: SMTP via [PHPMailer](https://github.com/PHPMailer/PHPMailer) (Dreamhost `yourdoamin.com`)
 - **Logging**: [Monolog](https://github.com/Seldaek/monolog)
 - **DI Container**: [PHP-DI](https://php-di.org/)
 - **Environment**: [phpdotenv](https://github.com/vlucas/phpdotenv)
@@ -81,8 +81,8 @@ A lightweight, secure REST API built with **Slim Framework 4** following **OWASP
 
 ```bash
 # 1. Clone the repo
-git clone <repo-url> gonyva-api
-cd gonyva-api
+git clone <repo-url> sample-api
+cd sample-api
 
 # 2. Create environment file
 cp .env.example .env
@@ -96,8 +96,8 @@ curl http://localhost:8080/health
 ```
 
 This starts two containers:
-- **gonyva-api** — PHP 8.3 + Apache on port `8080`
-- **gonyva-db** — MySQL 8.0 on port `3306`
+- **sample-api** — PHP 8.3 + Apache on port `8080`
+- **sample-db** — MySQL 8.0 on port `3306`
 
 The database migration (`database/migration.sql`) runs automatically on first start and seeds an admin user.
 
@@ -120,7 +120,7 @@ docker compose up -d
 docker compose down
 
 # View logs
-docker logs gonyva-api -f
+docker logs sample-api -f
 
 # Reset database (wipe volume)
 docker compose down -v && docker compose up --build -d
@@ -137,9 +137,9 @@ Key settings for Docker development:
 APP_ENV=local
 APP_DEBUG=true
 DB_HOST=db
-DB_NAME=gonyva_api
-DB_USER=gonyva
-DB_PASS=gonyva_secret
+DB_NAME=sample_api
+DB_USER=sample
+DB_PASS=sample_secret
 JWT_SECRET=<generate with: php -r "echo bin2hex(random_bytes(32));">
 CORS_ALLOWED_ORIGINS=*
 ```
@@ -232,7 +232,7 @@ curl -X POST http://localhost:8080/api/v1/email/send \
 The `POST /api/v1/email/send` endpoint:
 
 - **Requires**: JWT authentication
-- **SMTP**: Sends via Dreamhost's `mail.gonyva.co` (port 465, SSL)
+- **SMTP**: Sends via Dreamhost's `smtp.dreamhost.com` (port 587, STARTTLS)
 - **HTML support**: The `message` field accepts HTML content which is sanitized before sending
 - **Allowed HTML tags**: `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>` and related tags
 - **Stripped**: JavaScript event handlers (`onclick`, `onerror`, etc.) and `javascript:` URIs
@@ -274,24 +274,24 @@ Edit `.env` with production settings:
 ```env
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://api.gonyva.co
+APP_URL=https://api.yourdomain.com
 
-DB_HOST=mysql.gonyva.co
+DB_HOST=mysql.yourdomain.com
 DB_NAME=your_database
 DB_USER=your_db_user
 DB_PASS=your_db_password
 
 JWT_SECRET=<64+ character random string>
 
-CORS_ALLOWED_ORIGINS=https://gonyva.co
+CORS_ALLOWED_ORIGINS=https://yourdomain.com
 
-SMTP_HOST=mail.gonyva.co
-SMTP_PORT=465
-SMTP_ENCRYPTION=ssl
-SMTP_USER=noreply@gonyva.co
+SMTP_HOST=smtp.dreamhost.com
+SMTP_PORT=587
+SMTP_ENCRYPTION=tls
+SMTP_USER=noreply@yourdomain.com
 SMTP_PASS=your_email_password
-SMTP_FROM_EMAIL=noreply@gonyva.co
-SMTP_FROM_NAME="GoNyva API"
+SMTP_FROM_EMAIL=noreply@yourdomain.com
+SMTP_FROM_NAME="sample API"
 ```
 
 ### 4. Set Document Root

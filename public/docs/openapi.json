@@ -354,7 +354,7 @@
       "post": {
         "tags": ["Email"],
         "summary": "Send an email",
-        "description": "Sends an email via Dreamhost SMTP (gonyva.co). Requires JWT authentication. The `message` field accepts HTML content which will be sanitized before sending.\n\n**Allowed HTML tags:** `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`",
+        "description": "Sends an email via Dreamhost SMTP (`smtp.dreamhost.com`) using STARTTLS on port `587`. Requires JWT authentication. The authenticated SMTP user and `from` address should match. The `message` field accepts HTML content which will be sanitized before sending.\n\n**Allowed HTML tags:** `<p>`, `<br>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<h1>`–`<h6>`, `<ul>`, `<ol>`, `<li>`, `<a>`, `<img>`, `<blockquote>`, `<pre>`, `<code>`, `<hr>`, `<span>`, `<div>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,

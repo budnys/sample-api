@@ -43,13 +43,15 @@ $container->set('settings', function () {
             'allowed_headers' => $_ENV['CORS_ALLOWED_HEADERS'] ?? 'Content-Type,Authorization,X-Request-ID',
             'max_age' => (int) ($_ENV['CORS_MAX_AGE'] ?? 86400),
         ],
+        // Dreamhost shared hosting: smtp.dreamhost.com, port 587, STARTTLS
+        // Ref: https://help.dreamhost.com/hc/en-us/articles/360031174411
         'smtp' => [
-            'host' => $_ENV['SMTP_HOST'] ?? 'mail.gonyva.co',
-            'port' => (int) ($_ENV['SMTP_PORT'] ?? 465),
-            'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'ssl',
+            'host' => $_ENV['SMTP_HOST'] ?? 'smtp.dreamhost.com',
+            'port' => (int) ($_ENV['SMTP_PORT'] ?? 587),
+            'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'tls',
             'user' => $_ENV['SMTP_USER'] ?? '',
             'pass' => $_ENV['SMTP_PASS'] ?? '',
-            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? $_ENV['SMTP_USER'] ?? '',
             'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'GoNyva API',
         ],
     ];

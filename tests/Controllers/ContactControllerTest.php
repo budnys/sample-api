@@ -640,7 +640,41 @@ class ContactControllerTest extends TestCase
     {
         $_ENV['SMTP_ENCRYPTION'] = 'tls';
         $controller = new ContactController($this->logger);
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
+
+        $method = new \ReflectionMethod(ContactController::class, 'sendEmail');
+        $method->setAccessible(true);
+
+        try {
+            $method->invoke($controller, 'Test', 'test@example.com', '<p>Hi</p>');
+        } catch (\Throwable $e) {
+            // Expected — SMTP unreachable
+        }
+        $this->assertTrue(true);
+    }
+
+    public function testSendEmailSslEncryptionPath(): void
+    {
         $_ENV['SMTP_ENCRYPTION'] = 'ssl';
+        $controller = new ContactController($this->logger);
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
+
+        $method = new \ReflectionMethod(ContactController::class, 'sendEmail');
+        $method->setAccessible(true);
+
+        try {
+            $method->invoke($controller, 'Test', 'test@example.com', '<p>Hi</p>');
+        } catch (\Throwable $e) {
+            // Expected — SMTP unreachable
+        }
+        $this->assertTrue(true);
+    }
+
+    public function testSendEmailNoEncryptionPath(): void
+    {
+        $_ENV['SMTP_ENCRYPTION'] = 'none';
+        $controller = new ContactController($this->logger);
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
 
         $method = new \ReflectionMethod(ContactController::class, 'sendEmail');
         $method->setAccessible(true);

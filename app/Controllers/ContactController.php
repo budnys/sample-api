@@ -26,14 +26,19 @@ class ContactController
     {
         $this->logger = $logger;
         $this->smtpSettings = [
-            'host' => $_ENV['SMTP_HOST'] ?? 'mail.gonyva.co',
-            'port' => (int) ($_ENV['SMTP_PORT'] ?? 465),
-            'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'ssl',
+            // Dreamhost shared hosting: use smtp.dreamhost.com, port 587, STARTTLS
+            // Ref: https://help.dreamhost.com/hc/en-us/articles/360031174411
+            'host' => $_ENV['SMTP_HOST'] ?? 'smtp.dreamhost.com',
+            'port' => (int) ($_ENV['SMTP_PORT'] ?? 587),
+            'encryption' => $_ENV['SMTP_ENCRYPTION'] ?? 'tls',
             'user' => $_ENV['SMTP_USER'] ?? '',
             'pass' => $_ENV['SMTP_PASS'] ?? '',
-            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            // Dreamhost requires setFrom to match the SMTP username
+            'from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? $_ENV['SMTP_USER'] ?? '',
             'from_name' => $_ENV['SMTP_FROM_NAME'] ?? 'GoNyva API',
-            'to_email' => $_ENV['CONTACT_TO_EMAIL'] ?? $_ENV['SMTP_FROM_EMAIL'] ?? 'noreply@gonyva.co',
+            'to_email' => $_ENV['CONTACT_TO_EMAIL'] ?? $_ENV['SMTP_FROM_EMAIL'] ?? $_ENV['SMTP_USER'] ?? '',
+            'debug' => filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN),
+            'timeout' => (int) ($_ENV['SMTP_TIMEOUT'] ?? 30),
         ];
         $this->captchaSettings = [
             'secret' => $_ENV['HCAPTCHA_SECRET'] ?? '',
@@ -187,20 +192,26 @@ class ContactController
     {
         $mail = new PHPMailer(true);
 
-        // SMTP configuration
+        // Dreamhost shared hosting PHPMailer configuration
+        // Ref: https://help.dreamhost.com/hc/en-us/articles/360031174411
+        $mail->SMTPDebug = $this->smtpSettings['debug'] ? 2 : 0;
         $mail->isSMTP();
         $mail->Host = $this->smtpSettings['host'];
-        $mail->Port = $this->smtpSettings['port'];
         $mail->SMTPAuth = true;
         $mail->Username = $this->smtpSettings['user'];
         $mail->Password = $this->smtpSettings['pass'];
 
-        // Encryption
+        // Dreamhost recommends STARTTLS on port 587
         $encryption = strtolower($this->smtpSettings['encryption']);
-        if ($encryption === 'ssl') {
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        } elseif ($encryption === 'tls') {
+        if ($encryption === 'tls') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $this->smtpSettings['port'] ?: 587;
+        } elseif ($encryption === 'ssl') {
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = $this->smtpSettings['port'] ?: 465;
+        } else {
+            $mail->SMTPSecure = false;
+            $mail->Port = $this->smtpSettings['port'] ?: 587;
         }
 
         // Sender and recipient
@@ -216,7 +227,7 @@ class ContactController
         $mail->AltBody = strip_tags(str_replace(['<br>', '<br/>', '<br />'], "\n", $htmlMessage));
 
         // Timeout
-        $mail->Timeout = 30;
+        $mail->Timeout = $this->smtpSettings['timeout'];
         $mail->SMTPKeepAlive = false;
 
         $mail->send();

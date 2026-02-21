@@ -19,7 +19,7 @@ class TestableEmailController extends EmailController
     public bool $sendCalled = false;
     public string $lastRecipient = '';
 
-    public function __construct(\Monolog\Logger $logger, string $encryption = 'ssl')
+    public function __construct(\Monolog\Logger $logger, string $encryption = 'tls')
     {
         parent::__construct($logger);
         // Override encryption for TLS testing
@@ -355,10 +355,10 @@ class EmailControllerTest extends TestCase
 
     public function testSendEmailConfiguresTlsEncryption(): void
     {
-        // Set encryption to TLS via env override
+        // TLS is now the default for Dreamhost, but test the explicit path
         $_ENV['SMTP_ENCRYPTION'] = 'tls';
         $controller = new EmailController($this->logger);
-        $_ENV['SMTP_ENCRYPTION'] = 'ssl'; // reset
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
 
         $method = new \ReflectionMethod(EmailController::class, 'sendEmail');
         $method->setAccessible(true);
@@ -372,11 +372,28 @@ class EmailControllerTest extends TestCase
         $this->assertTrue(true); // Exercised TLS path
     }
 
+    public function testSendEmailConfiguresSslEncryption(): void
+    {
+        $_ENV['SMTP_ENCRYPTION'] = 'ssl';
+        $controller = new EmailController($this->logger);
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
+
+        $method = new \ReflectionMethod(EmailController::class, 'sendEmail');
+        $method->setAccessible(true);
+
+        try {
+            $method->invoke($controller, 'Test', 'test@example.com', '<p>Hi</p>');
+        } catch (\Throwable $e) {
+            // Expected — SMTP server unreachable
+        }
+        $this->assertTrue(true); // Exercised SSL path
+    }
+
     public function testSendEmailConfiguresNoEncryption(): void
     {
         $_ENV['SMTP_ENCRYPTION'] = 'none';
         $controller = new EmailController($this->logger);
-        $_ENV['SMTP_ENCRYPTION'] = 'ssl'; // reset
+        $_ENV['SMTP_ENCRYPTION'] = 'tls'; // reset to default
 
         $method = new \ReflectionMethod(EmailController::class, 'sendEmail');
         $method->setAccessible(true);
